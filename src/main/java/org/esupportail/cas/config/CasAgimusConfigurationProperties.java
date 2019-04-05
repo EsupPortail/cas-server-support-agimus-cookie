@@ -2,13 +2,15 @@ package org.esupportail.cas.config;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * CAS Agimus configuration properties model.
  *
  * @author Julien Marchal
  */
-@ConfigurationProperties(prefix = "cas.agimus")
+@PropertySource(ignoreResourceNotFound = true, value={"classpath:agimus.properties", "file:/var/cas/config/agimus.properties", "file:/opt/cas/config/agimus.properties", "file:/etc/cas/config/agimus.properties", "file:${cas.standalone.configurationDirectory}/agimus.properties"})
+@ConfigurationProperties(prefix = "agimus", ignoreUnknownFields = false)
 public class CasAgimusConfigurationProperties {
     private String cookieName = "AGIMUS";
     // 3 days

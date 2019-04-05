@@ -1,1 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.esupportail.cas.config.CasAgimusCookieWebflowConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.esupportail.cas.config.CasAgimusCookieWebflowConfiguration,\
+org.esupportail.cas.config.CasAgimusConfigurationProperties

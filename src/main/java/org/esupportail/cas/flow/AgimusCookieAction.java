@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.webflow.execution.RequestContext;
 /**
  * This is {@link AgimusCookieAction} that extracts basic authN credentials from the request.
@@ -28,8 +29,6 @@ import org.springframework.webflow.execution.RequestContext;
 public class AgimusCookieAction extends AbstractNonInteractiveCredentialsAction {
     private static final Logger LOGGER = LoggerFactory.getLogger(AgimusCookieAction.class);
     
-    @Autowired
-    @Qualifier("agimusConfigurationProperties")
     private CasAgimusConfigurationProperties agimusConfigurationProperties;
     
     @Autowired
@@ -46,8 +45,9 @@ public class AgimusCookieAction extends AbstractNonInteractiveCredentialsAction 
     
     public AgimusCookieAction(final CasDelegatingWebflowEventResolver initialAuthenticationAttemptWebflowEventResolver,
                                      final CasWebflowEventResolver serviceTicketRequestWebflowEventResolver,
-                                     final AdaptiveAuthenticationPolicy adaptiveAuthenticationPolicy) {    	
+                                     final AdaptiveAuthenticationPolicy adaptiveAuthenticationPolicy, CasAgimusConfigurationProperties casAgimusConfigurationProperties) {    	
     	super(initialAuthenticationAttemptWebflowEventResolver, serviceTicketRequestWebflowEventResolver, adaptiveAuthenticationPolicy);
+    	this.agimusConfigurationProperties = casAgimusConfigurationProperties;
     	LOGGER.debug("AgimusCookieAction::AgimusCookieAction : create bean AgimusCookieAction");
     }
 

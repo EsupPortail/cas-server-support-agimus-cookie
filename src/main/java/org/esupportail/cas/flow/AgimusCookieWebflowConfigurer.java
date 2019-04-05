@@ -37,7 +37,7 @@ public class AgimusCookieWebflowConfigurer extends AbstractCasWebflowConfigurer 
         	LOGGER.debug("AgimusCookieWebflowConfigurer::doInitialize : Add agimusCookieAction in WebFlow");
         	
         	final ActionState actionState = getState(flow, CasWebflowConstants.STATE_ID_GENERATE_SERVICE_TICKET, ActionState.class);
-            actionState.getEntryActionList().add(createEvaluateAction("agimusCookieAction"));
+        	actionState.getEntryActionList().add(createEvaluateAction("agimusCookieAction"));
         }
     }
     

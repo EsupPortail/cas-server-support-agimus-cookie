@@ -2,9 +2,10 @@ package org.esupportail.cas.config;
 
 import org.apereo.cas.authentication.adaptive.AdaptiveAuthenticationPolicy;
 import org.apereo.cas.configuration.CasConfigurationProperties;
-import org.apereo.cas.ticket.UniqueTicketIdGenerator;
 import org.apereo.cas.util.HostNameBasedUniqueTicketIdGenerator;
 import org.apereo.cas.web.flow.CasWebflowConfigurer;
+import org.apereo.cas.web.flow.CasWebflowExecutionPlan;
+import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer;
 import org.apereo.cas.web.flow.resolver.CasDelegatingWebflowEventResolver;
 import org.apereo.cas.web.flow.resolver.CasWebflowEventResolver;
 import org.apereo.cas.web.support.CookieRetrievingCookieGenerator;
@@ -14,8 +15,10 @@ import org.esupportail.cas.util.CasAgimusLogger;
 import org.esupportail.cas.web.AgimusCookieRetrievingCookieGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContext;
@@ -34,20 +37,20 @@ import org.springframework.webflow.execution.Action;
  */
 @Configuration("casAgimusCookieWebflowConfiguration")
 @EnableConfigurationProperties(CasConfigurationProperties.class)
-public class CasAgimusCookieWebflowConfiguration {
+public class CasAgimusCookieWebflowConfiguration implements CasWebflowExecutionPlanConfigurer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CasAgimusCookieWebflowConfiguration.class);
    	
 	@Autowired
-    @Qualifier("adaptiveAuthenticationPolicy")
-    private AdaptiveAuthenticationPolicy adaptiveAuthenticationPolicy;
-
-    @Autowired
-    @Qualifier("serviceTicketRequestWebflowEventResolver")
-    private CasWebflowEventResolver serviceTicketRequestWebflowEventResolver;
-
-    @Autowired
-    @Qualifier("initialAuthenticationAttemptWebflowEventResolver")
-    private CasDelegatingWebflowEventResolver initialAuthenticationAttemptWebflowEventResolver;
+	@Qualifier("adaptiveAuthenticationPolicy")
+	private ObjectProvider<AdaptiveAuthenticationPolicy> adaptiveAuthenticationPolicy;
+	
+	@Autowired
+	@Qualifier("serviceTicketRequestWebflowEventResolver")
+	private ObjectProvider<CasWebflowEventResolver> serviceTicketRequestWebflowEventResolver;
+	
+	@Autowired
+	@Qualifier("initialAuthenticationAttemptWebflowEventResolver")
+	private ObjectProvider<CasDelegatingWebflowEventResolver> initialAuthenticationAttemptWebflowEventResolver;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -56,8 +59,11 @@ public class CasAgimusCookieWebflowConfiguration {
     private CasConfigurationProperties casProperties;
     
     @Autowired
+    private CasAgimusConfigurationProperties casAgimusConfigurationProperties;
+    
+    @Autowired
     @Qualifier("loginFlowRegistry")
-    private FlowDefinitionRegistry loginFlowDefinitionRegistry;
+    private ObjectProvider<FlowDefinitionRegistry> loginFlowDefinitionRegistry;
 
     @Autowired
     private FlowBuilderServices flowBuilderServices;
@@ -65,38 +71,31 @@ public class CasAgimusCookieWebflowConfiguration {
     @Autowired
     @Qualifier("agimusTokenTicketIdGenerator")
     private HostNameBasedUniqueTicketIdGenerator agimusTokenTicketIdGenerator;
-
-    
-    @Bean
-    @RefreshScope
-    public CasAgimusConfigurationProperties agimusConfigurationProperties() {
-        return new CasAgimusConfigurationProperties();
-    }
     
     @Bean
     @RefreshScope
     public HostNameBasedUniqueTicketIdGenerator agimusTokenTicketIdGenerator() {
         /*return new DefaultUniqueTicketIdGenerator();*/
     	return new HostNameBasedUniqueTicketIdGenerator(
-    				agimusConfigurationProperties().getCookieValueMaxLength(),
+    				casAgimusConfigurationProperties.getCookieValueMaxLength(),
     				casProperties.getHost().getName()
     			);
     }
-
-    @Bean
-    public CasAgimusLogger agimusLogger() {
-    	LOGGER.debug("CasAgimusCookieWebflowConfiguration::CasAgimusLogger : Create bean agimusLogger");    	
     
-        return new CasAgimusLogger();
-    }
+   @Bean
+   public CasAgimusLogger agimusLogger() {
+      	LOGGER.debug("CasAgimusCookieWebflowConfiguration::CasAgimusLogger : Create bean agimusLogger");        
+      	return new CasAgimusLogger(casAgimusConfigurationProperties);
+   }
+
     
     @Bean
     public Action agimusCookieAction() {
     	LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieAction : Create bean agimusCookieAction");    	
     
-        return new AgimusCookieAction(initialAuthenticationAttemptWebflowEventResolver, 
-                serviceTicketRequestWebflowEventResolver,
-                adaptiveAuthenticationPolicy);
+        return new AgimusCookieAction(initialAuthenticationAttemptWebflowEventResolver.getIfAvailable(), 
+                serviceTicketRequestWebflowEventResolver.getIfAvailable(),
+                adaptiveAuthenticationPolicy.getIfAvailable(), casAgimusConfigurationProperties);
     }
     
     @Bean
@@ -105,32 +104,35 @@ public class CasAgimusCookieWebflowConfiguration {
     	LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : Create bean agimusCookieGenerator");
     	LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : Read Properties");
     	
-    	CasAgimusConfigurationProperties agimusConfigurationProperties = this.agimusConfigurationProperties();
-    	
 
-    	LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookieName = ["+ agimusConfigurationProperties.getCookieName() +"]");                        
-        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookieMaxAge = ["+ agimusConfigurationProperties.getCookieMaxAge() +"]");
-        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookiePath = ["+ agimusConfigurationProperties.getCookiePath() +"]");
-        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookieDomain = ["+ agimusConfigurationProperties.getCookieDomain() +"]");
-        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookieValuePrefix = ["+ agimusConfigurationProperties.getCookieValuePrefix() +"]");
-        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusTraceFileSeparator = ["+ agimusConfigurationProperties.getTraceFileSeparator() +"]");
+    	LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookieName = ["+ casAgimusConfigurationProperties.getCookieName() +"]");                        
+        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookieMaxAge = ["+ casAgimusConfigurationProperties.getCookieMaxAge() +"]");
+        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookiePath = ["+ casAgimusConfigurationProperties.getCookiePath() +"]");
+        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookieDomain = ["+ casAgimusConfigurationProperties.getCookieDomain() +"]");
+        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusCookieValuePrefix = ["+ casAgimusConfigurationProperties.getCookieValuePrefix() +"]");
+        LOGGER.debug("CasAgimusCookieWebflowConfiguration::agimusCookieGenerator : AgimusTraceFileSeparator = ["+ casAgimusConfigurationProperties.getTraceFileSeparator() +"]");
         
-    	return new AgimusCookieRetrievingCookieGenerator(agimusConfigurationProperties.getCookieName(), 
-    			agimusConfigurationProperties.getCookiePath(), 
-    			agimusConfigurationProperties.getCookieMaxAge(),
-    			agimusConfigurationProperties.getCookieDomain(),
-    			agimusConfigurationProperties.getCookieValuePrefix());
+    	return new AgimusCookieRetrievingCookieGenerator(casAgimusConfigurationProperties.getCookieName(), 
+    			casAgimusConfigurationProperties.getCookiePath(), 
+    			casAgimusConfigurationProperties.getCookieMaxAge(),
+    			casAgimusConfigurationProperties.getCookieDomain(),
+    			casAgimusConfigurationProperties.getCookieValuePrefix());
     }
     
+    @ConditionalOnMissingBean(name = "agimusCookieWebflowConfigurer")
     @Bean
-    @DependsOn("defaultWebflowConfigurer")
+    @RefreshScope
     public CasWebflowConfigurer agimusCookieWebflowConfigurer() {
     	LOGGER.info("CasAgimusCookieWebflowConfiguration::agimusCookieWebflowConfigurer : configure Agimus WebFlow");    
-    	final CasWebflowConfigurer w = new AgimusCookieWebflowConfigurer(flowBuilderServices,          
-                loginFlowDefinitionRegistry,
+    	return new AgimusCookieWebflowConfigurer(flowBuilderServices,          
+                loginFlowDefinitionRegistry.getIfAvailable(),
                 applicationContext, casProperties);
-        w.initialize();
-        return w;
     }   
+    
+    @Override
+    public void configureWebflowExecutionPlan(final CasWebflowExecutionPlan plan) {
+    	plan.registerWebflowConfigurer(agimusCookieWebflowConfigurer());
+    }
+
     
 }

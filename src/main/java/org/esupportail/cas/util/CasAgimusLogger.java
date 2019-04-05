@@ -3,8 +3,6 @@ package org.esupportail.cas.util;
 import org.esupportail.cas.config.CasAgimusConfigurationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * This is {@link CasAgimusLogger}.
@@ -15,12 +13,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class CasAgimusLogger {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CasAgimusLogger.class);
    
-	@Autowired
-    @Qualifier("agimusConfigurationProperties")
     private CasAgimusConfigurationProperties agimusConfigurationProperties;
     
-	public CasAgimusLogger() {		
+	public CasAgimusLogger(CasAgimusConfigurationProperties casAgimusConfigurationProperties) {		
 		LOGGER.debug("CasAgimusLogger::CasAgimusLogger : create bean CasAgimusLogger");    	
+		this.agimusConfigurationProperties= casAgimusConfigurationProperties;
 	}
 	
 	public void log(String username, String value) {

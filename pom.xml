@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.esupportail.cas</groupId>
   <artifactId>cas-server-support-agimus-cookie</artifactId>
-  <version>5.2.2</version>
+  <version>6.0.3</version>
   <packaging>jar</packaging>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -28,17 +28,17 @@
 		</dependency>			
 		<dependency>
 			<groupId>org.apereo.cas</groupId>
-			<artifactId>cas-server-core-webflow</artifactId>
+			<artifactId>cas-server-core-webflow-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apereo.cas</groupId>
-			<artifactId>cas-server-core-web</artifactId>
+			<artifactId>cas-server-core-web-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apereo.cas</groupId>
-			<artifactId>cas-server-support-cookie</artifactId>
+			<artifactId>cas-server-core-cookie-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
