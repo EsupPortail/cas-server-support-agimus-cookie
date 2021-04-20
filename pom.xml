@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.esupportail.cas</groupId>
   <artifactId>cas-server-support-agimus-cookie</artifactId>
-  <version>6.0.3</version>
+  <version>6.0.8.1</version>
   <packaging>jar</packaging>
   <build>
     <sourceDirectory>src</sourceDirectory>
