@@ -16,12 +16,12 @@ public class CasAgimusConfigurationProperties {
     // 3 days
     private int cookieMaxAge = 259200;
     private String cookiePath = "/";
-    private int cookieValueMaxLength = 30;
-    public int getCookieValueMaxLength() {
+    private long cookieValueMaxLength = 30;
+    public long getCookieValueMaxLength() {
 		return cookieValueMaxLength;
 	}
 
-	public void setCookieValueMaxLength(int cookieValueMaxLength) {
+	public void setCookieValueMaxLength(long cookieValueMaxLength) {
 		this.cookieValueMaxLength = cookieValueMaxLength;
 	}
 
