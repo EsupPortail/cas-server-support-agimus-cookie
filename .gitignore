@@ -12,3 +12,4 @@ classes/
 .idea
 **/*.log
 .gradle/
+cas-server-support-agimus-cookie.iml
