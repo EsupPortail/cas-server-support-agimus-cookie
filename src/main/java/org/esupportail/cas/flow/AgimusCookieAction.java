@@ -12,7 +12,7 @@ import org.apereo.cas.web.flow.resolver.CasDelegatingWebflowEventResolver;
 import org.apereo.cas.web.flow.resolver.CasWebflowEventResolver;
 import org.apereo.cas.web.support.WebUtils;
 import org.apereo.cas.web.support.gen.CookieRetrievingCookieGenerator;
-import org.esupportail.cas.config.CasAgimusConfigurationProperties;
+import org.esupportail.cas.config.CasAgimusCookieConfigurationProperties;
 import org.esupportail.cas.util.CasAgimusLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ import org.springframework.webflow.execution.RequestContext;
 public class AgimusCookieAction extends AbstractNonInteractiveCredentialsAction {
     private static final Logger LOGGER = LoggerFactory.getLogger(AgimusCookieAction.class);
     
-    private CasAgimusConfigurationProperties agimusConfigurationProperties;
+    private CasAgimusCookieConfigurationProperties agimusConfigurationProperties;
     
     @Autowired
     @Qualifier("agimusCookieGenerator")
@@ -44,7 +44,7 @@ public class AgimusCookieAction extends AbstractNonInteractiveCredentialsAction 
     
     public AgimusCookieAction(final CasDelegatingWebflowEventResolver initialAuthenticationAttemptWebflowEventResolver,
                                      final CasWebflowEventResolver serviceTicketRequestWebflowEventResolver,
-                                     final AdaptiveAuthenticationPolicy adaptiveAuthenticationPolicy, CasAgimusConfigurationProperties casAgimusConfigurationProperties) {    	
+                                     final AdaptiveAuthenticationPolicy adaptiveAuthenticationPolicy, CasAgimusCookieConfigurationProperties casAgimusConfigurationProperties) {
     	super(initialAuthenticationAttemptWebflowEventResolver, serviceTicketRequestWebflowEventResolver, adaptiveAuthenticationPolicy);
     	this.agimusConfigurationProperties = casAgimusConfigurationProperties;
     	LOGGER.debug("AgimusCookieAction::AgimusCookieAction : create bean AgimusCookieAction");
