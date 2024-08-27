@@ -11,7 +11,7 @@ import org.springframework.context.annotation.PropertySource;
  */
 @PropertySource(ignoreResourceNotFound = true, value={"classpath:agimus.properties", "file:/var/cas/config/agimus.properties", "file:/opt/cas/config/agimus.properties", "file:/etc/cas/config/agimus.properties", "file:${cas.standalone.configurationDirectory}/agimus.properties"})
 @ConfigurationProperties(prefix = "agimus", ignoreUnknownFields = false)
-public class CasAgimusConfigurationProperties {
+public class CasAgimusCookieConfigurationProperties {
     private String cookieName = "AGIMUS";
     // 3 days
     private int cookieMaxAge = 259200;

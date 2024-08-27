@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.esupportail.cas</groupId>
   <artifactId>cas-server-support-agimus-cookie</artifactId>
-  <version>6.4.4</version>
+  <version>7.0.6</version>
   <packaging>jar</packaging>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -57,19 +57,12 @@
 			<version>${cas.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>servlet-api</artifactId>
-		    <version>2.3</version>
-		    <scope>provided</scope>
-		</dependency>
     </dependencies>
     
     <properties>
-        <springboot.version>1.5.8.RELEASE</springboot.version>
-        <cas.version>6.4.4</cas.version>        
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <cas.version>7.0.6</cas.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     

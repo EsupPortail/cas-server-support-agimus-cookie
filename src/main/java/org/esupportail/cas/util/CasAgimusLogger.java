@@ -1,6 +1,6 @@
 package org.esupportail.cas.util;
 
-import org.esupportail.cas.config.CasAgimusConfigurationProperties;
+import org.esupportail.cas.config.CasAgimusCookieConfigurationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 public class CasAgimusLogger {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CasAgimusLogger.class);
    
-    private CasAgimusConfigurationProperties agimusConfigurationProperties;
+    private CasAgimusCookieConfigurationProperties agimusConfigurationProperties;
     
-	public CasAgimusLogger(CasAgimusConfigurationProperties casAgimusConfigurationProperties) {		
+	public CasAgimusLogger(CasAgimusCookieConfigurationProperties casAgimusConfigurationProperties) {
 		LOGGER.debug("CasAgimusLogger::CasAgimusLogger : create bean CasAgimusLogger");    	
 		this.agimusConfigurationProperties= casAgimusConfigurationProperties;
 	}
