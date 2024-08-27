@@ -1,5 +1,5 @@
 # cas-server-support-agimus-cookie
-![Esup Portail](https://www.esup-portail.org/sites/esup-portail.org/files/logo-esup%2Baccroche_2.png "Esup Portail")
+![Esup Portail](https://www.esup-portail.org/sites/default/files/logo-esupportail_1.png "Esup Portail")
 
 cas-server-support-agimus-cookie est une extension du serveur CAS pour déposer un cookie de domaine lors d'une authentification. En parallèle cette extension va générer un fichier avec l'id de l'utilisateur authentifié et le valeur du cookie qui lui a été donné.
 Si le cookie est déjà présent sur le poste client un nouveau ne sera pas généré.
