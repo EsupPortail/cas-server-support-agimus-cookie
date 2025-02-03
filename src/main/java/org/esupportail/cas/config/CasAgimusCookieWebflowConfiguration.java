@@ -81,7 +81,7 @@ public class CasAgimusCookieWebflowConfiguration implements CasWebflowExecutionP
         /*return new DefaultUniqueTicketIdGenerator();*/
     	return new HostNameBasedUniqueTicketIdGenerator(
     				casAgimusConfigurationProperties.getCookieValueMaxLength(),
-    				casProperties.getServer().getName()
+    				casProperties.getHost().getName()
     			);
     }
     
